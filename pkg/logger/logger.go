@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/fatih/color"
@@ -32,4 +33,14 @@ func (l *Logger) Instructions(msg string, args ...interface{}) {
 	white := color.New(color.FgHiWhite)
 	white.Println("")
 	white.Println(fmt.Sprintf(msg, args...))
+}
+
+var contextKey = "logger"
+
+func FromContext(ctx context.Context) *Logger {
+	return ctx.Value(&contextKey).(*Logger)
+}
+
+func ToContext(ctx context.Context, l *Logger) context.Context {
+	return context.WithValue(ctx, &contextKey, l)
 }
