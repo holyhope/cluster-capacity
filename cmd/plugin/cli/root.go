@@ -18,6 +18,11 @@ var (
 	KubernetesConfigFlags *genericclioptions.ConfigFlags
 )
 
+const (
+	MemoryCmd = "memory"
+	CPUCmd    = "cpu"
+)
+
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           "cluster-capacity",
@@ -32,8 +37,21 @@ func RootCmd() *cobra.Command {
 			log := logger.NewLogger()
 			ctx := logger.ToContext(context.TODO(), log)
 
-			if err := plugin.RunPlugin(ctx, KubernetesConfigFlags); err != nil {
-				return errors.Unwrap(err)
+			if len(args) != 1 {
+				return errors.New("expected 1 parameter")
+			}
+
+			switch args[0] {
+			case MemoryCmd:
+				if err := plugin.TotalMemory(ctx, KubernetesConfigFlags); err != nil {
+					return errors.Unwrap(err)
+				}
+			case CPUCmd:
+				if err := plugin.TotalCPU(ctx, KubernetesConfigFlags); err != nil {
+					return errors.Unwrap(err)
+				}
+			default:
+				return fmt.Errorf("unsupported argument %s, expected %s or %s", args[0], MemoryCmd, CPUCmd)
 			}
 
 			return nil
