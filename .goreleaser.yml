@@ -1,10 +1,10 @@
-project_name: {{ .PluginName }}
+project_name: cluster-capacity
 release:
   github:
-    owner: {{ .Owner }}
-    name: {{ .Repo }}
+    owner: holyhope
+    name: cluster-capacity
 builds:
-  - id: {{ .PluginName }}
+  - id: cluster-capacity
     goos:
     - linux
     - windows
@@ -17,12 +17,12 @@ builds:
       - GO111MODULE=on
     main: cmd/plugin/main.go
     ldflags: -s -w
-      -X github.com/{{ .Owner }}/{{ .Repo }}/pkg/version.version=
+      -X github.com/holyhope/cluster-capacity/pkg/version.version=
 archives:
-  - id: {{ .PluginName }}
+  - id: cluster-capacity
     builds:
-    - {{ .PluginName }}
-    name_template: {{ `"{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"` }}
+    - cluster-capacity
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
     - goos: windows
       format: zip
